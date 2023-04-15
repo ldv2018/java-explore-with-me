@@ -4,15 +4,19 @@ import lombok.NoArgsConstructor;
 import ru.practicum.statsdto.HitDto;
 import ru.practicum.statsserver.model.Hit;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @NoArgsConstructor
 public class HitMapper {
+    static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static Hit toHit(HitDto hitDto) {
         return Hit.builder()
                 .app(hitDto.getApp())
                 .uri(hitDto.getUri())
                 .ip(hitDto.getIp())
-                .timestamp(hitDto.getTimestamp())
+                .timestamp(LocalDateTime.parse(hitDto.getTimestamp(), dateTimeFormatter))
                 .build();
     }
 
@@ -21,7 +25,7 @@ public class HitMapper {
                 .app(hit.getApp())
                 .uri(hit.getUri())
                 .ip(hit.getIp())
-                .timestamp(hit.getTimestamp())
+                .timestamp(hit.getTimestamp().format(dateTimeFormatter))
                 .build();
     }
 }
