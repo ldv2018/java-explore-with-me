@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
-public class StatsServiceImpl implements StatsService{
+public class StatsServiceImpl implements StatsService {
 
     final StatsRepository repository;
     final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -36,10 +36,10 @@ public class StatsServiceImpl implements StatsService{
         LocalDateTime endFormatted = LocalDateTime.parse(end, dateTimeFormatter);
         throwIfDateTimeNotValid(startFormatted, endFormatted);
         List<Stat> statistic;
-        if(uris == null) {
+        if (uris == null) {
             uris = new ArrayList<>();
         }
-        if(unique) {
+        if (unique) {
             log.info("Find statistic unique, uri = {}", uris);
             statistic = uris.isEmpty() ?
                     repository.countHitsUnique(startFormatted, endFormatted) :
@@ -55,7 +55,7 @@ public class StatsServiceImpl implements StatsService{
     }
 
     private void throwIfDateTimeNotValid(LocalDateTime start, LocalDateTime end) {
-        if(end.isBefore(start)) {
+        if (end.isBefore(start)) {
             log.info("end time {} is before start {}", end, start);
             throw new BadRequestException(HttpStatus.BAD_REQUEST, "wrong times value for statistics");
         }

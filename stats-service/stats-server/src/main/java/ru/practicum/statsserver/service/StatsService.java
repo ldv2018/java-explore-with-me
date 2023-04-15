@@ -1,10 +1,8 @@
 package ru.practicum.statsserver.service;
 
-import ru.practicum.statsdto.HitDto;
 import ru.practicum.statsdto.Stat;
 import ru.practicum.statsserver.model.Hit;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatsService {
