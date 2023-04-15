@@ -3,6 +3,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+/ewm-service/.mvn
+/ewm-service/target
+/stats-service/**/.mvn
+/stats-service/**/target
 
 ### STS ###
 .apt_generated
