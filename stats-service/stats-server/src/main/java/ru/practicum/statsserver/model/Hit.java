@@ -58,7 +58,6 @@ import java.time.LocalDateTime;
 public class Hit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hit_id")
     int id;
     String app;
     String uri;
