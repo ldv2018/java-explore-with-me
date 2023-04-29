@@ -1,8 +1,6 @@
 package ru.practicum.ewmservice.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
@@ -13,13 +11,16 @@ import java.time.LocalDateTime;
 @Table(name = "events", schema = "public")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
     int id;
-    @Column(name = "category_id")
-    int category;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "category_id")
+    Category category;
     @Column(name = "confirmed_request")
     int confirmedRequest;
     LocalDateTime created;
@@ -27,17 +28,20 @@ public class Event {
     String annotation;
     @Column(name = "event_date")
     LocalDateTime eventDate;
-    int initiator;
-    int location;
-    boolean paid;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "initiator")
+    User initiator;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "location")
+    Location location;
+    Boolean paid;
     @Column(name = "participant_limit")
-    int participantLimit;
+    Integer participantLimit;
     @Column(name = "published_on")
     LocalDateTime publishedOn;
     @Column(name ="request_moderation")
-    boolean requestModeration;
-    @Enumerated
+    Boolean requestModeration;
+    @Enumerated(EnumType.STRING)
     State state;
     String title;
-    int views;
 }

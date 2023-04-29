@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.statsdto.HitDto;
@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Component
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StatsClient {
-    @Value("${stats-server.uri}")
-    String local;
-    final RestTemplate restTemplate = new RestTemplate();
+    String local = "http://stats-server:9090";
+    RestTemplate restTemplate = new RestTemplate();
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public void saveStat(HitDto hitDto) {
@@ -36,8 +36,12 @@ public class StatsClient {
                               LocalDateTime end,
                               List<String> uris,
                               boolean unique) {
-        String startFormatted = start.format(dateTimeFormatter);
-        String endFormatted = end.format(dateTimeFormatter);
+        String startFormatted = "";
+        String endFormatted = "";
+        if(start != null && end != null) {
+            startFormatted = start.format(dateTimeFormatter);
+            endFormatted = end.format(dateTimeFormatter);
+        }
         log.info("Request for get statistic from {} to {}, unique - {}",
                 startFormatted,
                 endFormatted,

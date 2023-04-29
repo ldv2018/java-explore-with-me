@@ -24,4 +24,6 @@ public interface StatsRepository extends JpaRepository<Hit, Integer> {
     @Query(name = "GetUniqueIpStat", nativeQuery = true)
     List<Stat> countHitsUnique(LocalDateTime start, LocalDateTime end, List<String> uris);
 
+    @Query(name = "GetWithoutTime", nativeQuery = true)
+    List<Stat> countHitsWithoutTime(List<String> uris);
 }

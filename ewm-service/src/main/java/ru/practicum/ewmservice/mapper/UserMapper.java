@@ -6,7 +6,6 @@ import ru.practicum.ewmservice.model.User;
 
 @NoArgsConstructor
 public class UserMapper {
-
     public static User toUser(UserDto userDto) {
         return User.builder()
                 .email(userDto.getEmail())

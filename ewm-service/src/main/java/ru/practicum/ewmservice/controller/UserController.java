@@ -1,4 +1,4 @@
-package ru.practicum.ewmservice.controller.admin;
+package ru.practicum.ewmservice.controller;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

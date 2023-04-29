@@ -32,6 +32,9 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<Stat> get(String start, String end, List<String> uris, boolean unique) {
+        if (start.isBlank() && end.isBlank()) {
+            return repository.countHitsWithoutTime(uris);
+        }
         LocalDateTime startFormatted = LocalDateTime.parse(start, dateTimeFormatter);
         LocalDateTime endFormatted = LocalDateTime.parse(end, dateTimeFormatter);
         throwIfDateTimeNotValid(startFormatted, endFormatted);

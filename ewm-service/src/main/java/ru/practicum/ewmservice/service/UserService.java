@@ -19,11 +19,15 @@ import java.util.List;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserService {
-
     final UserRepository userRepository;
-
     public User add(User user) {
         return userRepository.save(user);
+    }
+
+    public User findById(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND,
+                        "User with id= " + id + " was not found"));
     }
 
     public List<User> findAllById(List<Integer> ids, int from, int size) {

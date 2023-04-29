@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS categories (
     category_id     serial, --идентификатор категории
-    name            varchar(25), --имя категории
+    name            varchar(25) UNIQUE, --имя категории
     CONSTRAINT pk_categories PRIMARY KEY (category_id)
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS "events" (
     event_id            serial, --идентификатор
     category_id         int, --категория fk to categories
     confirmed_request   int, --количество одобренных заявок
-    created             timestamp without time zone DEFAULT current_timestamp , --дата и время создания заявки
+    created             timestamp without time zone, --дата и время создания заявки
     description         varchar(7000), --полное описание
     annotation          varchar(2000), --краткое описание
     event_date          timestamp without time zone, --дата и время проведения события
@@ -43,13 +43,14 @@ CREATE TABLE IF NOT EXISTS "events" (
     participant_limit   int DEFAULT 0, --ограничение по количеству участников
     published_on        timestamp without time zone, --время публикации
     request_moderation  boolean DEFAULT true, --пре-модерация заявок
-    state               varchar(20) DEFAULT 'PENDING', --состояние
+    state               varchar(20), --состояние
     title               varchar(120), --заголовок
     views               int DEFAULT 0, --просмотры
     CONSTRAINT pk_events PRIMARY KEY (event_id),
     CONSTRAINT fk_events_category_id FOREIGN KEY (category_id) REFERENCES categories (category_id),
     CONSTRAINT fk_events_initiator FOREIGN KEY (initiator) REFERENCES users (user_id),
-    CONSTRAINT fk_events_location FOREIGN KEY (location) REFERENCES locations (location_id)
+    CONSTRAINT fk_events_location FOREIGN KEY (location) REFERENCES locations (location_id),
+    CHECK (confirmed_request <= events.participant_limit)
 );
 
 CREATE TABLE IF NOT EXISTS compilations (
@@ -60,6 +61,7 @@ CREATE TABLE IF NOT EXISTS compilations (
 );
 
 CREATE TABLE IF NOT EXISTS events_to_compilations (
+    id              serial,
     event_id        int, --идентификатор события fk to events
     compilation_id  int, --идентификатор подборки fk to compilations
     CONSTRAINT un_ev_comp UNIQUE (event_id, compilation_id),
@@ -74,13 +76,14 @@ CREATE TABLE IF NOT EXISTS participation_request (
     requester                   int, --идентификатор пользователя fk to users
     status                      varchar(20), --статус
     CONSTRAINT pk_participation_request PRIMARY KEY (participation_request_id),
+    CONSTRAINT un_event_requester UNIQUE (event_id, requester),
     CONSTRAINT fk_participation_request_event_id FOREIGN KEY (event_id) REFERENCES "events" (event_id),
     CONSTRAINT fk_participation_request_requester FOREIGN KEY (requester) REFERENCES users (user_id)
 );
 
 CREATE OR REPLACE FUNCTION calc_confirmed_request()
    RETURNS TRIGGER
-AS $confirmed_request_trigger$
+AS $$
 DECLARE
 	event_id_t int;
 request_count_t int;
@@ -102,10 +105,10 @@ SET confirmed_request = request_count_t
 WHERE event_id = event_id_t;
 RETURN NEW;
 END;
-$confirmed_request_trigger$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER confirmed_request_trigger
     AFTER INSERT OR UPDATE OR DELETE ON participation_request
     FOR EACH ROW
-    EXECUTE PROCEDURE calc_confirmed_request();
+    EXECUTE PROCEDURE calc_confirmed_request();;
 
