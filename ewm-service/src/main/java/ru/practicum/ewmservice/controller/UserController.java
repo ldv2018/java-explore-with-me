@@ -39,14 +39,7 @@ public class UserController {
                              @RequestParam(required = false, defaultValue = "10") @Min(1) int size) {
         log.info("Request for get all users with ids = {}, from = {}, size = {}", ids, from, size);
 
-        boolean isEmpty;
-        try {
-            isEmpty = ids.isEmpty();
-        } catch (NullPointerException e) {
-            throw new NullPointerException("Ids is null");
-        }
-
-        return ids != null || !isEmpty
+        return ids != null && ids.size() > 0
                 ? userService.findAllById(ids, from, size)
                 : userService.findAll(from, size);
     }
