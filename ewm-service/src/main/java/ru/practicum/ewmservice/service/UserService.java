@@ -20,6 +20,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserService {
     final UserRepository userRepository;
+
     public User add(User user) {
         return userRepository.save(user);
     }

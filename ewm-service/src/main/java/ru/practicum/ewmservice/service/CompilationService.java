@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class CompilationService {
     final CompilationRepository compilationRepository;
     final CompilationToEventRepository compilationToEventRepository;
+
     public Compilation create(Compilation compilation) {
         return compilationRepository.save(compilation);
     }

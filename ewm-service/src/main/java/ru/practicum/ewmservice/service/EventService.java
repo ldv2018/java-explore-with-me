@@ -26,7 +26,7 @@ public class EventService {
     static final String ADMIN_PUBLISH_EVENT_IS_REJECTED_ERROR = "Cannot publish the event because it's not in the right state: %s";
     static final String ADMIN_CANCEL_EVENT_IS_REJECTED_ERROR = "Cannot cancel the event because it's not in the right state: %s";
     static final String INVALID_EVENT_DATE_ERROR = "eventDate должно содержать дату после: %s";
-    final int MINIMAL_EVENT_DATE_HOURS = 2;
+    static final int MINIMAL_EVENT_DATE_HOURS = 2;
     final EventRepository eventRepository;
     final UserRepository userRepository;
 
@@ -145,23 +145,23 @@ public class EventService {
                 .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "event id = " + eventId + " not found"));
         Event.EventBuilder eventBuilder = event.toBuilder();
 
-        if(updateEvent.getEventDate() != null) {
+        if (updateEvent.getEventDate() != null) {
             throwIfEventDateNotValid(updateEvent.getEventDate());
         }
-        if(updateEvent.getState().equals(State.PUBLISHED)) {
-            if(!event.getState().equals(State.PENDING)) {
+        if (updateEvent.getState().equals(State.PUBLISHED)) {
+            if (!event.getState().equals(State.PENDING)) {
                 throw new ForbiddenOperation(HttpStatus.FORBIDDEN,
                         String.format(ADMIN_PUBLISH_EVENT_IS_REJECTED_ERROR, event.getState()));
             }
             LocalDateTime eventDate = Optional.ofNullable(updateEvent.getEventDate())
                     .orElse(event.getEventDate());
             LocalDateTime minEventDate = LocalDateTime.now().plusHours(1);
-            if(eventDate.isBefore(minEventDate)) {
+            if (eventDate.isBefore(minEventDate)) {
                 throw new ForbiddenOperation(HttpStatus.FORBIDDEN,
                         String.format(INVALID_EVENT_DATE_ERROR, minEventDate));
             }
             eventBuilder.publishedOn(LocalDateTime.now());
-        } else if(event.getState().equals(State.PUBLISHED) &&
+        } else if (event.getState().equals(State.PUBLISHED) &&
                 updateEvent.getState().equals(State.CANCELED)) {
             throw new ForbiddenOperation(HttpStatus.FORBIDDEN,
                     String.format(ADMIN_CANCEL_EVENT_IS_REJECTED_ERROR, event.getState()));
@@ -211,7 +211,7 @@ public class EventService {
     }
 
     private void throwIfUserIdNotValid(int userId) {
-        if(!userRepository.existsById(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new NotFoundException(HttpStatus.NOT_FOUND,
                     "user id " + userId + " not found");
         }

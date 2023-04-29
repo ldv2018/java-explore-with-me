@@ -19,6 +19,7 @@ public class ParticipationRequestStatusUpdateRequestDto {
     public enum ParticipationRequestStatusUpdateAction {
         CONFIRMED, REJECTED
     }
+
     @NotEmpty
     List<Integer> requestIds;
     @NotBlank

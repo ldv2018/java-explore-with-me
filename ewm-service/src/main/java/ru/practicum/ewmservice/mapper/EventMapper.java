@@ -30,6 +30,7 @@ public class EventMapper {
 
         return eventResponseDto;
     }
+
     public static EventResponseDto toEventResponseDto(Event event) {
         UserResponseDto initiator = UserResponseDto.builder()
                 .id(event.getInitiator().getId())
