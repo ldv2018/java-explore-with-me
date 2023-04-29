@@ -38,11 +38,17 @@ public class UserController {
                              @RequestParam(required = false, defaultValue = "0") @Min(0) int from,
                              @RequestParam(required = false, defaultValue = "10") @Min(1) int size) {
         log.info("Request for get all users with ids = {}, from = {}, size = {}", ids, from, size);
-        List<User> result = ids != null || !ids.isEmpty()
+
+        boolean isEmpty;
+        try {
+            isEmpty = ids.isEmpty();
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Ids is null");
+        }
+
+        return ids != null || !isEmpty
                 ? userService.findAllById(ids, from, size)
                 : userService.findAll(from, size);
-
-        return result;
     }
 
     @DeleteMapping("{userId}")
