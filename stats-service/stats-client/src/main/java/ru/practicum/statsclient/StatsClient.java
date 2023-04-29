@@ -38,7 +38,7 @@ public class StatsClient {
                               boolean unique) {
         String startFormatted = "";
         String endFormatted = "";
-        if(start != null && end != null) {
+        if (start != null && end != null) {
             startFormatted = start.format(dateTimeFormatter);
             endFormatted = end.format(dateTimeFormatter);
         }
