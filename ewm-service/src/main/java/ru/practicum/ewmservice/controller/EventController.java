@@ -157,7 +157,7 @@ public class EventController {
                 .map(DateTimeUtils::parse)
                 .orElse(null);
 
-        return eventService.getAllByUsersAndStatesAnsCategoriesAndStartAndEnd(users,
+        return eventService.getAllByUsersAndStatesAndCategoriesAndStartAndEnd(users,
                 eventStates,
                 categories,
                 eventStart,

@@ -121,7 +121,7 @@ public class EventService {
     }
 
 //admin
-    public List<Event> getAllByUsersAndStatesAnsCategoriesAndStartAndEnd(List<Integer> users,
+    public List<Event> getAllByUsersAndStatesAndCategoriesAndStartAndEnd(List<Integer> users,
                                                                          List<State> eventStates,
                                                                          List<Integer> categories,
                                                                          LocalDateTime eventStart,

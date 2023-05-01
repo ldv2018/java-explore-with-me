@@ -36,9 +36,8 @@ public class CompilationController {
     @PostMapping("/admin/compilations")
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationResponseDto add(@RequestBody @Validated CompilationRequestDto compilationRequestDto) {
-        List<Integer> eventIds = Optional.ofNullable(compilationRequestDto.getEvents())
-                .orElse(Collections.emptyList());
-        List<Event> events = eventIds.size() > 0
+        List<Integer> eventIds = compilationRequestDto.getEvents();
+        List<Event> events = (eventIds != null && eventIds.size() > 0)
                 ? eventService.getAllByIds(eventIds)
                 : Collections.emptyList();
         Compilation compilation = toCompilation(compilationRequestDto).toBuilder()
@@ -84,7 +83,7 @@ public class CompilationController {
 //Public path start
     @GetMapping("/compilations")
     @ResponseStatus(HttpStatus.OK)
-    public List<CompilationResponseDto> getById(
+    public List<CompilationResponseDto> getAll(
             @RequestParam(required = false) Boolean pinned,
             @RequestParam(defaultValue = "0", required = false) @Min(0) int from,
             @RequestParam(defaultValue = "10", required = false) @Min(1) int size

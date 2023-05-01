@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 public class ParticipationRequestStatusUpdateRequestDto {
     public enum ParticipationRequestStatusUpdateAction {
         CONFIRMED, REJECTED
