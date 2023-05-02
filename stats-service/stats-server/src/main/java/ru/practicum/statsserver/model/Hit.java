@@ -42,7 +42,12 @@ import java.time.LocalDateTime;
                         "WHERE (h.req_time BETWEEN :start AND :end) " +
                         "GROUP BY h.app, h.uri " +
                         "ORDER BY hits DESC"
-        )
+        ),
+        @NamedNativeQuery(name = "GetWithoutTime", resultSetMapping = "HitToDtoMapping",
+                query = "SELECT h.app AS app, h.uri AS uri, COUNT(h.ip) AS hits " +
+                        "FROM hits AS h " +
+                        "GROUP BY h.app, h.uri " +
+                        "ORDER BY hits DESC")
 })
 @SqlResultSetMapping(name = "HitToDtoMapping",
         classes = {

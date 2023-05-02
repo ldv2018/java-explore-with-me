@@ -4,12 +4,13 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Stat {
-    final String app;
-    final String uri;
-    final int hits;
+    String app;
+    String uri;
+    int hits;
 }
