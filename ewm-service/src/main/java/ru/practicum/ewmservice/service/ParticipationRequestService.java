@@ -7,9 +7,12 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewmservice.model.Event;
+import ru.practicum.ewmservice.model.ParticipationRequest;
+import ru.practicum.ewmservice.model.ParticipationRequestState;
+import ru.practicum.ewmservice.model.State;
 import ru.practicum.ewmservice.exception.ForbiddenOperation;
 import ru.practicum.ewmservice.exception.NotFoundException;
-import ru.practicum.ewmservice.model.*;
 import ru.practicum.ewmservice.storage.EventRepository;
 import ru.practicum.ewmservice.storage.ParticipationRequestRepository;
 

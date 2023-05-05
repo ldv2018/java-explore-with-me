@@ -5,7 +5,8 @@ DROP TABLE IF EXISTS
     "events",
     compilations,
     events_to_compilations,
-    participation_request
+    participation_request,
+    comments
 CASCADE;
 
 CREATE TABLE IF NOT EXISTS locations (
@@ -81,6 +82,19 @@ CREATE TABLE IF NOT EXISTS participation_request (
     CONSTRAINT fk_participation_request_requester FOREIGN KEY (requester) REFERENCES users (user_id)
 );
 
+CREATE TABLE IF NOT EXISTS comments (
+    comment_id      serial, --идентификатор
+    user_id         int, --fk to users
+    event_id        int, --fk to event
+    content         text, --текст комментария
+    published_on    timestamp with time zone DEFAULT now(), --дата-время публикации комментария
+    is_edited       boolean DEFAULT false, --был ли редактирован
+    is_approved      boolean DEFAULT false, --прошел ли модерацию
+    CONSTRAINT un_comments_user_event UNIQUE (user_id, event_id),
+    CONSTRAINT fk_comments_user_id FOREIGN KEY (user_id) REFERENCES users (user_id),
+    CONSTRAINT fk_comments_event_id FOREIGN KEY (event_id) REFERENCES events (event_id)
+);
+
 CREATE OR REPLACE FUNCTION calc_confirmed_request()
    RETURNS TRIGGER
 AS $$
@@ -107,7 +121,7 @@ RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER confirmed_request_trigger
+CREATE OR REPLACE TRIGGER confirmed_request_trigger
     AFTER INSERT OR UPDATE OR DELETE ON participation_request
     FOR EACH ROW
     EXECUTE PROCEDURE calc_confirmed_request();;
