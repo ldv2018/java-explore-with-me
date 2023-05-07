@@ -38,9 +38,12 @@ public class CommentService {
     }
 
     public void delete(int userId, int eventId) {
-        Comment comment = commentRepository.findByUserIdAndEventId(userId, eventId)
-                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User has no comment for this event"));
-        commentRepository.delete(comment);
+        commentRepository
+                .findByUserIdAndEventId(userId, eventId)
+                .ifPresentOrElse(commentRepository::delete,
+                        () -> {
+                            throw new NotFoundException(HttpStatus.NOT_FOUND, "User has no comment for this event");
+                        });
     }
 
     public Comment getByEventId(int userId, int eventId) {

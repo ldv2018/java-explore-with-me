@@ -1,6 +1,8 @@
 package ru.practicum.ewmservice.controller;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentController {
 
     final CommentService commentService;
@@ -94,9 +97,8 @@ public class CommentController {
                                                    @RequestParam(defaultValue = "10", required = false) @Min(1) int size) {
         log.info("PRIVATE GET ALL");
         log.info("Request for get Comments: userId = {}; from = {}, size = {}", userId, from, size);
-        List<Comment> comments = commentService.getAllByUserId(userId, from, size);
 
-        return comments.stream()
+        return commentService.getAllByUserId(userId, from, size).stream()
                 .map(CommentMapper::toCommentResponseDto)
                 .collect(Collectors.toList());
     }
